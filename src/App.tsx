@@ -13,6 +13,7 @@ import {
   Wrench,
   Server,
   RefreshCw,
+  Shield,
 } from "lucide-react";
 import type { Provider } from "@/types";
 import type { EnvConflict } from "@/types/env";
@@ -43,6 +44,7 @@ import PromptPanel from "@/components/prompts/PromptPanel";
 import { SkillsPage } from "@/components/skills/SkillsPage";
 import { DeepLinkImportDialog } from "@/components/DeepLinkImportDialog";
 import { AgentsPanel } from "@/components/agents/AgentsPanel";
+import { ThinkingFixDialog } from "@/components/ThinkingFixDialog";
 import { Button } from "@/components/ui/button";
 
 type View = "providers" | "settings" | "prompts" | "skills" | "mcp" | "agents";
@@ -58,6 +60,7 @@ function App() {
   const [activeApp, setActiveApp] = useState<AppId>("claude");
   const [currentView, setCurrentView] = useState<View>("providers");
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isThinkingFixOpen, setIsThinkingFixOpen] = useState(false);
 
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
   const [usageProvider, setUsageProvider] = useState<Provider | null>(null);
@@ -521,6 +524,18 @@ function App() {
                   >
                     <Settings className="w-4 h-4" />
                   </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsThinkingFixOpen(true)}
+                    title={t(
+                      "thinkingFix.buttonTitle",
+                      "Fix 400 thinking error",
+                    )}
+                    className="hover:bg-black/5 dark:hover:bg-white/5"
+                  >
+                    <Shield className="w-4 h-4 text-emerald-500 fill-emerald-500" />
+                  </Button>
                 </div>
                 <UpdateBadge onClick={() => setCurrentView("settings")} />
               </>
@@ -641,10 +656,13 @@ function App() {
       </header>
 
       <main className="flex-1 pb-12 animate-fade-in ">
-        <div className="pb-12">
-          {renderContent()}
-        </div>
+        <div className="pb-12">{renderContent()}</div>
       </main>
+
+      <ThinkingFixDialog
+        open={isThinkingFixOpen}
+        onOpenChange={setIsThinkingFixOpen}
+      />
 
       <AddProviderDialog
         open={isAddOpen}

@@ -689,6 +689,9 @@ pub fn run() {
             commands::get_stream_check_config,
             commands::save_stream_check_config,
             commands::get_tool_versions,
+            // Thinking blocks fix
+            commands::get_claude_projects,
+            commands::fix_thinking_blocks,
         ]);
 
     let app = builder

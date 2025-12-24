@@ -14,6 +14,7 @@ mod proxy;
 mod settings;
 pub mod skill;
 mod stream_check;
+mod thinking_fix;
 mod usage;
 
 pub use config::*;
@@ -30,4 +31,5 @@ pub use proxy::*;
 pub use settings::*;
 pub use skill::*;
 pub use stream_check::*;
+pub use thinking_fix::*;
 pub use usage::*;
