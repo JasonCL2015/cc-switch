@@ -103,10 +103,10 @@ export const providerPresets: ProviderPreset[] = [
       env: {
         ANTHROPIC_BASE_URL: "https://open.bigmodel.cn/api/anthropic",
         ANTHROPIC_AUTH_TOKEN: "",
-        ANTHROPIC_MODEL: "glm-4.6",
-        ANTHROPIC_DEFAULT_HAIKU_MODEL: "glm-4.5-air",
-        ANTHROPIC_DEFAULT_SONNET_MODEL: "glm-4.6",
-        ANTHROPIC_DEFAULT_OPUS_MODEL: "glm-4.6",
+        ANTHROPIC_MODEL: "glm-4.7",
+        ANTHROPIC_DEFAULT_HAIKU_MODEL: "glm-4.7",
+        ANTHROPIC_DEFAULT_SONNET_MODEL: "glm-4.7",
+        ANTHROPIC_DEFAULT_OPUS_MODEL: "glm-4.7",
       },
     },
     category: "cn_official",
@@ -120,8 +120,7 @@ export const providerPresets: ProviderPreset[] = [
     websiteUrl: "https://bailian.console.aliyun.com",
     settingsConfig: {
       env: {
-        ANTHROPIC_BASE_URL:
-          "https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy",
+        ANTHROPIC_BASE_URL: "https://dashscope.aliyuncs.com/apps/anthropic",
         ANTHROPIC_AUTH_TOKEN: "",
         ANTHROPIC_MODEL: "qwen3-max",
         ANTHROPIC_DEFAULT_HAIKU_MODEL: "qwen3-max",

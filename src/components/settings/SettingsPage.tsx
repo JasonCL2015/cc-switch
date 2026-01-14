@@ -9,6 +9,8 @@ import {
   Database,
   Server,
   ChevronDown,
+  Zap,
+  Globe,
 } from "lucide-react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { toast } from "sonner";
@@ -34,12 +36,14 @@ import { WindowSettings } from "@/components/settings/WindowSettings";
 import { DirectorySettings } from "@/components/settings/DirectorySettings";
 import { ImportExportSection } from "@/components/settings/ImportExportSection";
 import { AboutSection } from "@/components/settings/AboutSection";
+import { GlobalProxySettings } from "@/components/settings/GlobalProxySettings";
 import { ProxyPanel } from "@/components/proxy";
 import { PricingConfigPanel } from "@/components/usage/PricingConfigPanel";
 import { ModelTestConfigPanel } from "@/components/usage/ModelTestConfigPanel";
 import { AutoFailoverConfigPanel } from "@/components/proxy/AutoFailoverConfigPanel";
 import { FailoverQueueManager } from "@/components/proxy/FailoverQueueManager";
 import { UsageDashboard } from "@/components/usage/UsageDashboard";
+import { RectifierConfigPanel } from "@/components/settings/RectifierConfigPanel";
 import { useSettings } from "@/hooks/useSettings";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useTranslation } from "react-i18next";
@@ -52,12 +56,14 @@ interface SettingsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onImportSuccess?: () => void | Promise<void>;
+  defaultTab?: string;
 }
 
 export function SettingsPage({
   open,
   onOpenChange,
   onImportSuccess,
+  defaultTab = "general",
 }: SettingsDialogProps) {
   const { t } = useTranslation();
   const {
@@ -98,10 +104,10 @@ export function SettingsPage({
 
   useEffect(() => {
     if (open) {
-      setActiveTab("general");
+      setActiveTab(defaultTab);
       resetStatus();
     }
-  }, [open, resetStatus]);
+  }, [open, resetStatus, defaultTab]);
 
   useEffect(() => {
     if (requiresRestart) {
@@ -332,28 +338,6 @@ export function SettingsPage({
                     </AccordionItem>
 
                     <AccordionItem
-                      value="test"
-                      className="rounded-xl glass-card overflow-hidden"
-                    >
-                      <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
-                        <div className="flex items-center gap-3">
-                          <Activity className="h-5 w-5 text-indigo-500" />
-                          <div className="text-left">
-                            <h3 className="text-base font-semibold">
-                              {t("settings.advanced.modelTest.title")}
-                            </h3>
-                            <p className="text-sm text-muted-foreground font-normal">
-                              {t("settings.advanced.modelTest.description")}
-                            </p>
-                          </div>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="px-6 pb-6 pt-4 border-t border-border/50">
-                        <ModelTestConfigPanel />
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem
                       value="failover"
                       className="rounded-xl glass-card overflow-hidden"
                     >
@@ -384,48 +368,112 @@ export function SettingsPage({
                             </div>
                           )}
 
-                          {/* 故障转移队列管理 - 每个应用独立 */}
-                          <div className="space-y-4">
-                            <div>
-                              <h4 className="text-sm font-semibold">
-                                {t("proxy.failoverQueue.title")}
-                              </h4>
-                              <p className="text-xs text-muted-foreground">
-                                {t("proxy.failoverQueue.description")}
-                              </p>
-                            </div>
-                            <Tabs defaultValue="claude" className="w-full">
-                              <TabsList className="grid w-full grid-cols-3">
-                                <TabsTrigger value="claude">Claude</TabsTrigger>
-                                <TabsTrigger value="codex">Codex</TabsTrigger>
-                                <TabsTrigger value="gemini">Gemini</TabsTrigger>
-                              </TabsList>
-                              <TabsContent value="claude" className="mt-4">
+                          {/* 故障转移设置 - 按应用分组 */}
+                          <Tabs defaultValue="claude" className="w-full">
+                            <TabsList className="grid w-full grid-cols-3">
+                              <TabsTrigger value="claude">Claude</TabsTrigger>
+                              <TabsTrigger value="codex">Codex</TabsTrigger>
+                              <TabsTrigger value="gemini">Gemini</TabsTrigger>
+                            </TabsList>
+                            <TabsContent
+                              value="claude"
+                              className="mt-4 space-y-6"
+                            >
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="text-sm font-semibold">
+                                    {t("proxy.failoverQueue.title")}
+                                  </h4>
+                                  <p className="text-xs text-muted-foreground">
+                                    {t("proxy.failoverQueue.description")}
+                                  </p>
+                                </div>
                                 <FailoverQueueManager
                                   appType="claude"
                                   disabled={!isRunning}
                                 />
-                              </TabsContent>
-                              <TabsContent value="codex" className="mt-4">
+                              </div>
+                              <div className="border-t border-border/50 pt-6">
+                                <AutoFailoverConfigPanel
+                                  appType="claude"
+                                  disabled={!isRunning}
+                                />
+                              </div>
+                            </TabsContent>
+                            <TabsContent
+                              value="codex"
+                              className="mt-4 space-y-6"
+                            >
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="text-sm font-semibold">
+                                    {t("proxy.failoverQueue.title")}
+                                  </h4>
+                                  <p className="text-xs text-muted-foreground">
+                                    {t("proxy.failoverQueue.description")}
+                                  </p>
+                                </div>
                                 <FailoverQueueManager
                                   appType="codex"
                                   disabled={!isRunning}
                                 />
-                              </TabsContent>
-                              <TabsContent value="gemini" className="mt-4">
+                              </div>
+                              <div className="border-t border-border/50 pt-6">
+                                <AutoFailoverConfigPanel
+                                  appType="codex"
+                                  disabled={!isRunning}
+                                />
+                              </div>
+                            </TabsContent>
+                            <TabsContent
+                              value="gemini"
+                              className="mt-4 space-y-6"
+                            >
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="text-sm font-semibold">
+                                    {t("proxy.failoverQueue.title")}
+                                  </h4>
+                                  <p className="text-xs text-muted-foreground">
+                                    {t("proxy.failoverQueue.description")}
+                                  </p>
+                                </div>
                                 <FailoverQueueManager
                                   appType="gemini"
                                   disabled={!isRunning}
                                 />
-                              </TabsContent>
-                            </Tabs>
-                          </div>
+                              </div>
+                              <div className="border-t border-border/50 pt-6">
+                                <AutoFailoverConfigPanel
+                                  appType="gemini"
+                                  disabled={!isRunning}
+                                />
+                              </div>
+                            </TabsContent>
+                          </Tabs>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                          {/* 熔断器配置 - 全局共享 */}
-                          <div className="border-t border-border/50 pt-6">
-                            <AutoFailoverConfigPanel />
+                    <AccordionItem
+                      value="test"
+                      className="rounded-xl glass-card overflow-hidden"
+                    >
+                      <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+                        <div className="flex items-center gap-3">
+                          <Activity className="h-5 w-5 text-indigo-500" />
+                          <div className="text-left">
+                            <h3 className="text-base font-semibold">
+                              {t("settings.advanced.modelTest.title")}
+                            </h3>
+                            <p className="text-sm text-muted-foreground font-normal">
+                              {t("settings.advanced.modelTest.description")}
+                            </p>
                           </div>
                         </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6 pt-4 border-t border-border/50">
+                        <ModelTestConfigPanel />
                       </AccordionContent>
                     </AccordionItem>
 
@@ -448,6 +496,28 @@ export function SettingsPage({
                       </AccordionTrigger>
                       <AccordionContent className="px-6 pb-6 pt-4 border-t border-border/50">
                         <PricingConfigPanel />
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem
+                      value="globalProxy"
+                      className="rounded-xl glass-card overflow-hidden"
+                    >
+                      <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+                        <div className="flex items-center gap-3">
+                          <Globe className="h-5 w-5 text-cyan-500" />
+                          <div className="text-left">
+                            <h3 className="text-base font-semibold">
+                              {t("settings.advanced.globalProxy.title")}
+                            </h3>
+                            <p className="text-sm text-muted-foreground font-normal">
+                              {t("settings.advanced.globalProxy.description")}
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6 pt-4 border-t border-border/50">
+                        <GlobalProxySettings />
                       </AccordionContent>
                     </AccordionItem>
 
@@ -480,6 +550,28 @@ export function SettingsPage({
                           onExport={exportConfig}
                           onClear={clearSelection}
                         />
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem
+                      value="rectifier"
+                      className="rounded-xl glass-card overflow-hidden"
+                    >
+                      <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+                        <div className="flex items-center gap-3">
+                          <Zap className="h-5 w-5 text-purple-500" />
+                          <div className="text-left">
+                            <h3 className="text-base font-semibold">
+                              {t("settings.advanced.rectifier.title")}
+                            </h3>
+                            <p className="text-sm text-muted-foreground font-normal">
+                              {t("settings.advanced.rectifier.description")}
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6 pt-4 border-t border-border/50">
+                        <RectifierConfigPanel />
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

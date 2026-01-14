@@ -53,7 +53,11 @@
     "editCommonConfig": "共通設定を編集",
     "editCommonConfigTitle": "共通設定スニペットを編集",
     "commonConfigHint": "「共通設定を書き込む」がオンのとき settings.json にマージされます",
-    "fullSettingsHint": "Claude Code の settings.json 全文"
+    "fullSettingsHint": "Claude Code の settings.json 全文",
+    "extractFromCurrent": "編集内容から抽出",
+    "extractNoCommonConfig": "編集内容から抽出できる共通設定がありません",
+    "extractFailed": "抽出に失敗しました: {{error}}",
+    "saveFailed": "保存に失敗しました: {{error}}"
   },
   "header": {
     "viewOnGithub": "GitHub で見る",
@@ -66,6 +70,8 @@
     "exitEditMode": "編集モードを終了"
   },
   "provider": {
+    "tabProvider": "プロバイダー",
+    "tabUniversal": "統一プロバイダー",
     "noProviders": "まだプロバイダーがありません",
     "noProvidersDescription": "右上の「プロバイダーを追加」を押して最初の API プロバイダーを登録してください",
     "currentlyUsing": "現在使用中",
@@ -177,9 +183,23 @@
         "title": "コスト計算",
         "description": "各モデルのトークン料金ルールを管理"
       },
+      "globalProxy": {
+        "title": "グローバル送信プロキシ",
+        "description": "CC Switch が外部 API にアクセスする際のプロキシを設定"
+      },
       "data": {
         "title": "データ管理",
         "description": "設定のインポート/エクスポートとバックアップ/復元"
+      },
+      "rectifier": {
+        "title": "整流器",
+        "description": "API リクエストの互換性問題を自動修正",
+        "enabled": "整流器を有効化",
+        "enabledDescription": "マスタースイッチ、オフにするとすべての整流機能が無効になります",
+        "requestGroup": "リクエスト整流",
+        "responseGroup": "レスポンス整流",
+        "thinkingSignature": "Thinking 署名整流",
+        "thinkingSignatureDescription": "Claude API の thinking 署名検証エラーを自動修正"
       }
     },
     "language": "言語",
@@ -245,6 +265,7 @@
     "aboutHint": "バージョン情報と更新状況を表示します。",
     "portableMode": "ポータブルモード: 更新は手動ダウンロードが必要です。",
     "updateAvailable": "新しいバージョンがあります: {{version}}",
+    "updateBadge": "更新あり",
     "updateFailed": "更新のインストールに失敗しました。ダウンロードページを開こうとしました。",
     "checkUpdateFailed": "更新の確認に失敗しました。時間をおいて再試行してください。",
     "openReleaseNotesFailed": "リリースノートの表示に失敗しました",
@@ -264,7 +285,21 @@
     "restartLater": "後で再起動",
     "restartFailed": "アプリの再起動に失敗しました。手動で閉じて再度開いてください。",
     "devModeRestartHint": "開発モードでは自動再起動をサポートしていません。手動で再起動してください。",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "globalProxy": {
+      "label": "グローバルプロキシ",
+      "hint": "すべてのリクエスト（API、Skills ダウンロードなど）をプロキシ経由で送信します。空欄で直接接続。",
+      "username": "ユーザー名（任意）",
+      "password": "パスワード（任意）",
+      "test": "接続テスト",
+      "scan": "ローカルプロキシをスキャン",
+      "clear": "クリア",
+      "scanFailed": "スキャンに失敗しました: {{error}}",
+      "saved": "プロキシ設定を保存しました",
+      "saveFailed": "保存に失敗しました: {{error}}",
+      "testSuccess": "接続成功！遅延 {{latency}}ms",
+      "testFailed": "接続に失敗しました: {{error}}"
+    }
   },
   "apps": {
     "claude": "Claude Code",
@@ -341,6 +376,9 @@
     "visitWebsite": "{{url}} を開く",
     "anthropicModel": "メインモデル",
     "anthropicSmallFastModel": "高速モデル",
+    "anthropicReasoningModel": "推論モデル（Thinking）",
+    "openrouterCompatMode": "OpenRouter 互換モード",
+    "openrouterCompatModeHint": "OpenAI Chat Completions インターフェースを使用し、Anthropic SSE に変換します。",
     "anthropicDefaultHaikuModel": "既定 Haiku モデル",
     "anthropicDefaultSonnetModel": "既定 Sonnet モデル",
     "anthropicDefaultOpusModel": "既定 Opus モデル",
@@ -389,7 +427,11 @@
     "editCommonConfig": "共通設定を編集",
     "editCommonConfigTitle": "Codex 共通設定スニペットを編集",
     "commonConfigHint": "「共通設定を書き込む」がオンの場合、config.toml の末尾に追記されます",
-    "apiUrlLabel": "API リクエスト URL"
+    "apiUrlLabel": "API リクエスト URL",
+    "extractFromCurrent": "編集内容から抽出",
+    "extractNoCommonConfig": "編集内容から抽出できる共通設定がありません",
+    "extractFailed": "抽出に失敗しました: {{error}}",
+    "saveFailed": "保存に失敗しました: {{error}}"
   },
   "geminiConfig": {
     "envFile": "環境変数 (.env)",
@@ -399,7 +441,18 @@
     "writeCommonConfig": "共通設定を書き込む",
     "editCommonConfig": "共通設定を編集",
     "editCommonConfigTitle": "Gemini 共通設定スニペットを編集",
-    "commonConfigHint": "共通設定スニペットは、この機能をオンにしたすべての Gemini プロバイダーへマージされます"
+    "commonConfigHint": "このスニペットは Gemini の .env に書き込みます（GOOGLE_GEMINI_BASE_URL、GEMINI_API_KEY は使用できません）",
+    "extractFromCurrent": "編集内容から抽出",
+    "extractNoCommonConfig": "編集内容から抽出できる共通設定がありません",
+    "extractFailed": "抽出に失敗しました: {{error}}",
+    "saveFailed": "保存に失敗しました: {{error}}",
+    "extractedConfigInvalid": "抽出した設定のフォーマットが不正です",
+    "invalidJsonFormat": "共通設定スニペットの形式が不正です（有効な JSON でなければなりません）",
+    "commonConfigInvalidKeys": "共通設定スニペットに GOOGLE_GEMINI_BASE_URL または GEMINI_API_KEY を含めることはできません（検出: {{keys}}）",
+    "commonConfigInvalidValues": "共通設定スニペットの値は文字列である必要があります",
+    "noCommonConfigToApply": "共通設定スニペットが空、または適用できる項目がありません",
+    "configMergeFailed": "設定のマージに失敗しました: {{error}}",
+    "configReplaceFailed": "設定の置換に失敗しました: {{error}}"
   },
   "providerPreset": {
     "label": "プロバイダータイプ",
@@ -418,7 +471,7 @@
     "cost": "コスト",
     "perMillion": "(100万あたり)",
     "trends": "利用トレンド",
-    "rangeToday": "今日 (時間別)",
+    "rangeToday": "直近24時間 (時間別)",
     "rangeLast7Days": "過去7日間",
     "rangeLast30Days": "過去30日間",
     "totalTokens": "総トークン数",
@@ -431,8 +484,8 @@
     "billingModel": "課金モデル",
     "inputTokens": "入力",
     "outputTokens": "出力",
-    "cacheReadTokens": "キャッシュ読取",
-    "cacheCreationTokens": "キャッシュ書込",
+    "cacheReadTokens": "キャッシュヒット",
+    "cacheCreationTokens": "キャッシュ作成",
     "timingInfo": "応答時間/TTFT",
     "status": "ステータス",
     "noData": "データなし",
@@ -448,8 +501,8 @@
     "displayName": "表示名",
     "inputCost": "入力コスト",
     "outputCost": "出力コスト",
-    "cacheReadCost": "キャッシュ読取",
-    "cacheWriteCost": "キャッシュ書込",
+    "cacheReadCost": "キャッシュヒット",
+    "cacheWriteCost": "キャッシュ作成",
     "deleteConfirmTitle": "削除の確認",
     "deleteConfirmDesc": "このモデル料金を削除しますか？この操作は元に戻せません。",
     "queryFailed": "照会に失敗しました",
@@ -476,8 +529,8 @@
     "timeRange": "期間",
     "input": "Input",
     "output": "Output",
-    "cacheWrite": "Write",
-    "cacheRead": "Read"
+    "cacheWrite": "作成",
+    "cacheRead": "ヒット"
   },
   "usageScript": {
     "title": "利用状況を設定",
@@ -530,6 +583,7 @@
     "testFailed": "テストに失敗しました",
     "formatSuccess": "整形に成功しました",
     "formatFailed": "整形に失敗しました",
+    "supportedVariables": "使用可能な変数",
     "variablesHint": "使用可能な変数: {{apiKey}}, {{baseUrl}} | extractor 関数には API 応答の JSON オブジェクトが渡されます",
     "scriptConfig": "リクエスト設定",
     "extractorCode": "抽出コード",
@@ -560,6 +614,9 @@
   },
   "mcp": {
     "title": "MCP 管理",
+    "import": "インポート",
+    "importExisting": "既存をインポート",
+    "addMcp": "MCPを追加",
     "claudeTitle": "Claude Code MCP 管理",
     "codexTitle": "Codex MCP 管理",
     "geminiTitle": "Gemini MCP 管理",
@@ -571,6 +628,8 @@
       "deleteConfirm": "サーバー「{{id}}」を削除しますか？この操作は元に戻せません。",
       "noServers": "まだサーバーがありません",
       "enabledApps": "有効なアプリ",
+      "noImportFound": "インポートする MCP サーバーが見つかりませんでした。すべてのサーバーは CC Switch で管理されています。",
+      "importSuccess": "{{count}} 個の MCP サーバーをインポートしました",
       "apps": {
         "claude": "Claude",
         "codex": "Codex",
@@ -788,8 +847,8 @@
   },
   "skills": {
     "manage": "Skills",
-    "title": "Claude スキル管理",
-    "description": "人気リポジトリから Claude Skills を探してインストールし、Claude Code/Codex を拡張",
+    "title": "Skills 管理",
+    "description": "人気リポジトリからスキルを探してインストールし、Claude Code/Codex/Gemini を拡張",
     "refresh": "更新",
     "refreshing": "更新中...",
     "repoManager": "リポジトリ管理",
@@ -865,7 +924,25 @@
       "installed": "インストール済み",
       "uninstalled": "未インストール"
     },
-    "noResults": "一致するスキルが見つかりませんでした"
+    "noResults": "一致するスキルが見つかりませんでした",
+    "noInstalled": "インストールされたスキルがありません",
+    "noInstalledDescription": "リポジトリからスキルを発見してインストールするか、既存のスキルをインポートしてください",
+    "discover": "スキルを発見",
+    "import": "既存をインポート",
+    "importDescription": "CC Switch 統合管理にインポートするスキルを選択してください",
+    "importSuccess": "{{count}} 件のスキルをインポートしました",
+    "importSelected": "選択をインポート ({{count}})",
+    "noUnmanagedFound": "インポートするスキルが見つかりませんでした。すべてのスキルは CC Switch で管理されています。",
+    "foundIn": "発見場所",
+    "local": "ローカル",
+    "uninstallConfirm": "「{{name}}」をアンインストールしますか？すべてのアプリからこのスキルが削除されます。",
+    "uninstallInMainPanel": "メインパネルからスキルをアンインストールしてください",
+    "notFound": "スキルが見つかりません",
+    "apps": {
+      "claude": "Claude",
+      "codex": "Codex",
+      "gemini": "Gemini"
+    }
   },
   "deeplink": {
     "confirmImport": "プロバイダーのインポートを確認",
@@ -909,6 +986,7 @@
     "configDetails": "設定の詳細",
     "configUrl": "設定ファイル URL",
     "configMergeError": "設定ファイルのマージに失敗しました",
+    "primaryEndpoint": "メイン",
     "mcp": {
       "title": "MCP サーバーを一括インポート",
       "targetApps": "ターゲットアプリ",
@@ -953,7 +1031,10 @@
     "clickToSelect": "クリックでアイコンを選択"
   },
   "migration": {
-    "success": "設定の移行が完了しました"
+    "success": "設定の移行が完了しました",
+    "skillsSuccess": "スキルを {{count}} 件、自動的に統合管理へインポートしました",
+    "skillsFailed": "スキルの自動インポートに失敗しました",
+    "skillsFailedDescription": "Skills 画面で「既存をインポート」をクリックして手動でインポートしてください（または再起動して再試行）。"
   },
   "agents": {
     "title": "エージェント"
@@ -982,12 +1063,85 @@
       }
     },
     "settings": {
+      "title": "プロキシサービス設定",
+      "description": "ローカルプロキシサーバーのリッスンアドレス、ポート、実行パラメータを設定します。保存後すぐに反映されます。",
+      "alert": {
+        "autoApply": "変更は実行中のプロキシサービスに自動的に同期され、手動での再起動は不要です。"
+      },
+      "basic": {
+        "title": "基本設定",
+        "description": "プロキシサービスのリッスンアドレスとポートを設定します。"
+      },
+      "advanced": {
+        "title": "詳細パラメータ",
+        "description": "リクエストの安定性とログ記録を制御します。"
+      },
+      "timeout": {
+        "title": "タイムアウト設定",
+        "description": "ストリーミングと非ストリーミングリクエストのタイムアウトを設定します。"
+      },
+      "fields": {
+        "listenAddress": {
+          "label": "リッスンアドレス",
+          "placeholder": "127.0.0.1",
+          "description": "プロキシサーバーがリッスンするIPアドレス（推奨: 127.0.0.1）"
+        },
+        "listenPort": {
+          "label": "リッスンポート",
+          "placeholder": "15721",
+          "description": "プロキシサーバーがリッスンするポート番号（1024 ~ 65535）"
+        },
+        "maxRetries": {
+          "label": "最大リトライ回数",
+          "placeholder": "3",
+          "description": "リクエスト失敗時のリトライ回数（0 ~ 10）"
+        },
+        "requestTimeout": {
+          "label": "リクエストタイムアウト（秒）",
+          "placeholder": "0（無制限）または 300",
+          "description": "単一リクエストの最大待機時間（0 = 無制限、または 10 ~ 600 秒）"
+        },
+        "enableLogging": {
+          "label": "ログ記録を有効化",
+          "description": "トラブルシューティングのためにすべてのプロキシリクエストを記録"
+        },
+        "streamingFirstByteTimeout": {
+          "label": "ストリーミング初回バイトタイムアウト（秒）",
+          "description": "最初のデータチャンクを待つ最大時間"
+        },
+        "streamingIdleTimeout": {
+          "label": "ストリーミングアイドルタイムアウト（秒）",
+          "description": "データチャンク間の最大間隔"
+        },
+        "nonStreamingTimeout": {
+          "label": "非ストリーミングタイムアウト（秒）",
+          "description": "非ストリーミングリクエストの総タイムアウト"
+        }
+      },
+      "validation": {
+        "addressInvalid": "有効なIPアドレスを入力してください",
+        "portMin": "ポートは1024より大きい必要があります",
+        "portMax": "ポートは65535より小さい必要があります",
+        "retryMin": "リトライ回数は負の値にできません",
+        "retryMax": "リトライ回数は10を超えることはできません",
+        "timeoutNonNegative": "タイムアウトは負の値にできません",
+        "timeoutMax": "タイムアウトは600秒を超えることはできません",
+        "timeoutRange": "0または10-600の間の値を入力してください",
+        "streamingTimeoutMin": "タイムアウトは少なくとも5秒必要です",
+        "streamingTimeoutMax": "タイムアウトは300秒を超えることはできません"
+      },
+      "actions": {
+        "save": "設定を保存"
+      },
       "toast": {
         "saved": "プロキシ設定を保存しました",
         "saveFailed": "保存に失敗しました: {{error}}"
       }
     },
     "switchFailed": "切り替えに失敗しました: {{error}}",
+    "failover": {
+      "proxyRequired": "フェイルオーバーを設定するには、プロキシサービスを先に起動する必要があります"
+    },
     "failoverQueue": {
       "title": "フェイルオーバーキュー",
       "description": "各アプリのプロバイダーのフェイルオーバー順序を管理します",
@@ -1014,7 +1168,7 @@
       "failureThresholdHint": "この回数連続で失敗するとサーキットブレーカーが開きます（推奨: 3-10）",
       "timeout": "回復待ち時間（秒）",
       "timeoutHint": "サーキットが開いた後、回復を試みるまでの待ち時間（推奨: 30-120）",
-      "circuitBreakerSettings": "サーキットブレーカー詳細設定",
+      "circuitBreakerSettings": "サーキットブレーカー設定",
       "successThreshold": "回復成功しきい値",
       "successThresholdHint": "半開状態でこの回数成功するとサーキットブレーカーが閉じます",
       "errorRate": "エラー率しきい値 (%)",
@@ -1042,6 +1196,66 @@
     "checkParams": "チェックパラメーター",
     "timeout": "タイムアウト（秒）",
     "maxRetries": "最大リトライ回数",
-    "degradedThreshold": "劣化しきい値（ミリ秒）"
+    "degradedThreshold": "劣化しきい値（ミリ秒）",
+    "testPrompt": "テストプロンプト"
+  },
+  "proxyConfig": {
+    "proxyEnabled": "プロキシ有効",
+    "appTakeover": "プロキシ有効",
+    "perAppConfig": "アプリ別設定",
+    "circuitBreaker": "サーキットブレーカー",
+    "circuitBreakerSettings": "サーキットブレーカー設定",
+    "failureThreshold": "失敗閾値",
+    "successThreshold": "回復閾値",
+    "recoveryTimeout": "回復待機時間",
+    "errorRateThreshold": "エラー率閾値",
+    "minRequests": "最小リクエスト数",
+    "timeoutConfig": "タイムアウト設定",
+    "streamingFirstByte": "ストリーミング初回バイトタイムアウト",
+    "streamingIdle": "ストリーミングアイドルタイムアウト",
+    "nonStreaming": "非ストリーミングタイムアウト"
+  },
+  "universalProvider": {
+    "title": "統合プロバイダー",
+    "description": "統合プロバイダーは Claude、Codex、Gemini の設定を同時に管理します。変更は有効なすべてのアプリに自動的に同期されます。",
+    "add": "統合プロバイダーを追加",
+    "edit": "統合プロバイダーを編集",
+    "empty": "統合プロバイダーがありません",
+    "emptyHint": "下の「統合プロバイダーを追加」ボタンをクリックして作成してください",
+    "selectPreset": "プリセットタイプを選択",
+    "name": "名前",
+    "namePlaceholder": "例：私の NewAPI",
+    "baseUrl": "API URL",
+    "apiKey": "API キー",
+    "websiteUrl": "ウェブサイト URL",
+    "websiteUrlPlaceholder": "https://example.com（オプション、リストに表示されます）",
+    "notes": "メモ",
+    "notesPlaceholder": "オプション：メモを追加",
+    "enabledApps": "有効なアプリ",
+    "modelConfig": "モデル設定",
+    "model": "モデル",
+    "sync": "アプリに同期",
+    "synced": "すべてのアプリに同期しました",
+    "syncError": "同期に失敗しました",
+    "noAppsEnabled": "有効なアプリがありません",
+    "added": "統合プロバイダーを追加しました",
+    "updated": "統合プロバイダーを更新しました",
+    "deleted": "統合プロバイダーを削除しました",
+    "addSuccess": "統合プロバイダーを追加しました",
+    "addFailed": "統合プロバイダーの追加に失敗しました",
+    "manage": "管理",
+    "loadError": "統合プロバイダーの読み込みに失敗しました",
+    "saveError": "統合プロバイダーの保存に失敗しました",
+    "deleteError": "統合プロバイダーの削除に失敗しました",
+    "deleteConfirmTitle": "統合プロバイダーを削除",
+    "deleteConfirmDescription": "「{{name}}」を削除してもよろしいですか？各アプリで生成されたプロバイダー設定も削除されます。",
+    "syncConfirmTitle": "統合プロバイダーを同期",
+    "syncConfirmDescription": "「{{name}}」を同期すると、Claude、Codex、Gemini の関連プロバイダー設定が上書きされます。続行しますか？",
+    "syncConfirm": "同期",
+    "saveAndSync": "保存して同期",
+    "savedAndSynced": "すべてのアプリに保存・同期されました",
+    "saveAndSyncError": "保存と同期に失敗しました",
+    "configJsonPreview": "設定 JSON プレビュー",
+    "configJsonPreviewHint": "以下は各アプリに同期される設定内容です（表示されているフィールドのみ上書きされ、他のカスタム設定は保持されます）"
   }
 }

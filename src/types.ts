@@ -52,6 +52,7 @@ export interface UsageScript {
   language: "javascript"; // 脚本语言
   code: string; // 脚本代码（JSON 格式配置）
   timeout?: number; // 超时时间（秒，默认 10）
+  templateType?: "custom" | "general" | "newapi"; // 模板类型（用于后端判断验证规则）
   apiKey?: string; // 用量查询专用的 API Key（通用模板使用）
   baseUrl?: string; // 用量查询专用的 Base URL（通用和 NewAPI 模板使用）
   accessToken?: string; // 访问令牌（NewAPI 模板使用）
@@ -92,6 +93,8 @@ export interface ProviderMeta {
   custom_endpoints?: Record<string, CustomEndpoint>;
   // 用量查询脚本配置
   usage_script?: UsageScript;
+  // 请求地址管理：测速后自动选择最佳端点
+  endpointAutoSelect?: boolean;
   // 是否为官方合作伙伴
   isPartner?: boolean;
   // 合作伙伴促销 key（用于后端识别 PackyCode 等）
@@ -186,3 +189,61 @@ export interface McpConfigResponse {
   configPath: string;
   servers: Record<string, McpServer>;
 }
+
+// ============================================================================
+// 统一供应商（Universal Provider）- 跨应用共享配置
+// ============================================================================
+
+// 统一供应商的应用启用状态
+export interface UniversalProviderApps {
+  claude: boolean;
+  codex: boolean;
+  gemini: boolean;
+}
+
+// Claude 模型配置
+export interface ClaudeModelConfig {
+  model?: string;
+  haikuModel?: string;
+  sonnetModel?: string;
+  opusModel?: string;
+}
+
+// Codex 模型配置
+export interface CodexModelConfig {
+  model?: string;
+  reasoningEffort?: string;
+}
+
+// Gemini 模型配置
+export interface GeminiModelConfig {
+  model?: string;
+}
+
+// 各应用的模型配置
+export interface UniversalProviderModels {
+  claude?: ClaudeModelConfig;
+  codex?: CodexModelConfig;
+  gemini?: GeminiModelConfig;
+}
+
+// 统一供应商（跨应用共享配置）
+export interface UniversalProvider {
+  id: string;
+  name: string;
+  providerType: string; // "newapi" | "custom" 等
+  apps: UniversalProviderApps;
+  baseUrl: string;
+  apiKey: string;
+  models: UniversalProviderModels;
+  websiteUrl?: string;
+  notes?: string;
+  icon?: string;
+  iconColor?: string;
+  meta?: ProviderMeta;
+  createdAt?: number;
+  sortIndex?: number;
+}
+
+// 统一供应商映射（id -> UniversalProvider）
+export type UniversalProvidersMap = Record<string, UniversalProvider>;

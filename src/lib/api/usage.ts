@@ -28,6 +28,7 @@ export const usageApi = {
     baseUrl?: string,
     accessToken?: string,
     userId?: string,
+    templateType?: "custom" | "general" | "newapi",
   ): Promise<UsageResult> => {
     return invoke("testUsageScript", {
       providerId,
@@ -38,6 +39,7 @@ export const usageApi = {
       baseUrl,
       accessToken,
       userId,
+      templateType,
     });
   },
 
@@ -49,8 +51,11 @@ export const usageApi = {
     return invoke("get_usage_summary", { startDate, endDate });
   },
 
-  getUsageTrends: async (days: number): Promise<DailyStats[]> => {
-    return invoke("get_usage_trends", { days });
+  getUsageTrends: async (
+    startDate?: number,
+    endDate?: number,
+  ): Promise<DailyStats[]> => {
+    return invoke("get_usage_trends", { startDate, endDate });
   },
 
   getProviderStats: async (): Promise<ProviderStats[]> => {
