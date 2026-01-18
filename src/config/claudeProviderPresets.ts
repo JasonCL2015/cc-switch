@@ -47,12 +47,12 @@ export interface ProviderPreset {
 
 export const providerPresets: ProviderPreset[] = [
   {
-    name: "⭐ HMCode",
-    websiteUrl: "https://hongmacode.com",
-    apiKeyUrl: "https://hongmacode.com",
+    name: "⭐ HongMaCC",
+    websiteUrl: "https://hongmacc.com/",
+    apiKeyUrl: "https://hongmacc.com/",
     settingsConfig: {
       env: {
-        ANTHROPIC_BASE_URL: "https://hongmacode.com/api",
+        ANTHROPIC_BASE_URL: "https://hongmacc.com/api",
         ANTHROPIC_AUTH_TOKEN: "",
       },
     },
@@ -60,7 +60,7 @@ export const providerPresets: ProviderPreset[] = [
     partnerPromotionKey: "hmcode",
     category: "third_party",
     icon: "hmcode",
-    iconColor: "#6B21A8",
+    iconColor: "#0e0f0f",
   },
   {
     name: "Claude Official",

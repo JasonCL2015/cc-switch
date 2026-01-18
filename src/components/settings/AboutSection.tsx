@@ -240,6 +240,7 @@ export function AboutSection({ isPortable }: AboutSectionProps) {
               <ExternalLink className="h-3.5 w-3.5" />
               {t("settings.releaseNotes")}
             </Button>
+{/* 检查更新按钮已隐藏
             <Button
               type="button"
               size="sm"
@@ -271,6 +272,7 @@ export function AboutSection({ isPortable }: AboutSectionProps) {
                 </>
               )}
             </Button>
+*/}
           </div>
         </div>
 

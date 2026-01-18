@@ -838,7 +838,7 @@ function App() {
 
       <EditProviderDialog
         open={Boolean(editingProvider)}
-        provider={editingProvider || lastEditingProviderRef.current}
+        provider={editingProvider || effectiveEditingProvider}
         onOpenChange={(open) => {
           if (!open) {
             setEditingProvider(null);
